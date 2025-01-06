@@ -2,6 +2,45 @@
 import { Grid, Box } from '@mui/material';
 import PageContainer from '@/app/(DashboardLayout)/components/container/PageContainer';
 // components
+import GeneralStatistics from '@/app/(DashboardLayout)/components/dashboard/GeneralStatistics';
+import GameStatistics from '@/app/(DashboardLayout)/components/dashboard/GameStatistics';
+import DiscountVoucher from '@/app/(DashboardLayout)/components/dashboard/DiscountVoucher';
+import VoucherStatistics from '@/app/(DashboardLayout)/components/dashboard/VoucherStatistics';
+
+const Dashboard = () => {
+  return (
+    <PageContainer title="Dashboard" description="Campaign Statistics Dashboard">
+      <Box>
+        <Grid container spacing={3}>
+          {/* General Statistics */}
+          <Grid item xs={12}>
+            <GeneralStatistics />
+          </Grid>
+
+          {/* Game and Discount Statistics */}
+          <Grid item xs={12} lg={6}>
+            <GameStatistics />
+          </Grid>
+          <Grid item xs={12} lg={6}>
+            <DiscountVoucher />
+          </Grid>
+
+          {/* Voucher Statistics */}
+          <Grid item xs={12}>
+            <VoucherStatistics />
+          </Grid>
+        </Grid>
+      </Box>
+    </PageContainer>
+  )
+}
+
+export default Dashboard;
+
+/* 'use client'
+import { Grid, Box } from '@mui/material';
+import PageContainer from '@/app/(DashboardLayout)/components/container/PageContainer';
+// components
 import SalesOverview from '@/app/(DashboardLayout)/components/dashboard/SalesOverview';
 import YearlyBreakup from '@/app/(DashboardLayout)/components/dashboard/YearlyBreakup';
 import RecentTransactions from '@/app/(DashboardLayout)/components/dashboard/RecentTransactions';
@@ -43,3 +82,4 @@ const Dashboard = () => {
 }
 
 export default Dashboard;
+ */

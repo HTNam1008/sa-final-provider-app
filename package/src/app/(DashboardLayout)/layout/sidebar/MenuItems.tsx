@@ -23,6 +23,30 @@ const Menuitems = [
     href: "/",
   },
   {
+    id: uniqueId(),
+    title: "Campaign",
+    icon: IconLayoutDashboard,
+    href: "/campaign",
+  },
+  {
+    id: uniqueId(),
+    title: "Store",
+    icon: IconLayoutDashboard,
+    href: "/store",
+  },
+  {
+    id: uniqueId(),
+    title: "Payment",
+    icon: IconLayoutDashboard,
+    href: "/payment",
+  },
+  {
+    id: uniqueId(),
+    title: "Quizzes",
+    icon: IconLayoutDashboard,
+    href: "/quizzes",
+  },
+  {
     navlabel: true,
     subheader: "Utilities",
   },
