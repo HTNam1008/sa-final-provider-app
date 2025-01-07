@@ -16,7 +16,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ onSearch }) => {
     <form onSubmit={handleSearch} style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '20px' }}>
       <input
         type="text"
-        placeholder="Search campaigns by name"
+        placeholder="Search payments by name"
         value={query}
         onChange={(e) => setQuery(e.target.value)}
         style={{ padding: '8px', marginRight: '10px' }}

@@ -15,44 +15,24 @@ import CancelIcon from '@mui/icons-material/Cancel';
 import AddIcon from '@mui/icons-material/Add';
 import { useRouter } from 'next/navigation';
 
-interface Campaign {
+interface Payment {
   id: string;
-  name: string;
-  startDate: string;
-  endDate: string;
-  status: 'ENDED' | 'NOT_ACCEPTED' | 'PENDING';
-  initial: number;
-  remaining: number;
-  paid: boolean;
+  campaign: string;
+  date: string;
+  status: 'COMPLETED' | 'NOT COMPLETE';
+  totalFee: number;
 }
 
-const CampaignPage = () => {
+const PaymentPage = () => {
   const router = useRouter();
   const [searchTerm, setSearchTerm] = useState('');
   
   const columns: GridColDef[] = [
-    { field: 'id', headerName: 'ID', width: 90 },
-    { field: 'name', headerName: 'Name', width: 200 },
-    { field: 'startDate', headerName: 'Start Date', width: 130 },
-    { field: 'endDate', headerName: 'End Date', width: 130 },
-    { field: 'status', headerName: 'Status', width: 130 },
-    { field: 'initial', headerName: 'Initial', width: 100 },
-    { 
-      field: 'remaining', 
-      headerName: 'Remaining', 
-      width: 130,
-      renderCell: (params) => `${params.value}%` 
-    },
-    {
-      field: 'paid',
-      headerName: 'Paid',
-      width: 100,
-      renderCell: (params) => (
-        params.value ? 
-          <CheckCircleIcon color="success" /> : 
-          <CancelIcon color="error" />
-      )
-    },
+    { field: 'id', headerName: 'ID', width: 100 },
+    { field: 'campaign', headerName: 'Campaign', width: 300 },
+    { field: 'totalFee', headerName: 'Total Fee ($)', width: 200 },
+    { field: 'status', headerName: 'Status', width: 200 },
+    { field: 'date', headerName: 'Date', width: 200 },
     {
       field: 'actions',
       headerName: 'Actions',
@@ -69,31 +49,28 @@ const CampaignPage = () => {
   ];
 
   // Sample data - replace with actual API call
-  const rows: Campaign[] = [
+  const rows: Payment[] = [
     {
       id: '1',
-      name: 'Summer Campaign',
-      startDate: '2024-01-01',
-      endDate: '2024-02-01',
-      status: 'PENDING',
-      initial: 1000,
-      remaining: 75,
-      paid: true
+      campaign: 'Summer Campaign',
+      date: '2024-01-01',
+      status: 'COMPLETED',
+      totalFee: 1000
     },
     // Add more sample data as needed
   ];
 
   const handleDelete = (id: string) => {
-    console.log('Delete campaign:', id);
+    console.log('Delete payment:', id);
     // Implement delete logic
   };
 
   const filteredRows = rows.filter(row =>
-    row.name.toLowerCase().includes(searchTerm.toLowerCase())
+    row.campaign.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   return (
-    <PageContainer title="Campaigns" description="Campaign Management">
+    <PageContainer title="Payments" description="Payment Management">
       <Box sx={{ height: 600, width: '100%' }}>
         <Stack
           direction="row"
@@ -103,20 +80,12 @@ const CampaignPage = () => {
           sx={{ mb: 3 }}
         >
           <TextField
-            label="Search Campaigns"
+            label="Search Payments"
             variant="outlined"
             size="small"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
-          <Button
-            variant="contained"
-            color="primary"
-            startIcon={<AddIcon />}
-            onClick={() => router.push('/campaign/create')}
-          >
-            Create Campaign
-          </Button>
         </Stack>
         
         <DataGrid
@@ -135,4 +104,4 @@ const CampaignPage = () => {
   );
 };
 
-export default CampaignPage;
+export default PaymentPage;
