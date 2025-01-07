@@ -1,100 +1,57 @@
 'use client'
-import { useState } from 'react';
-import { 
-  Box, 
-  Button,
-  TextField,
-  IconButton,
-  Stack
-} from '@mui/material';
-import { DataGrid, GridColDef } from '@mui/x-data-grid';
-import PageContainer from '@/app/(DashboardLayout)/components/container/PageContainer';
-import DeleteIcon from '@mui/icons-material/Delete';
-import CheckCircleIcon from '@mui/icons-material/CheckCircle';
-import CancelIcon from '@mui/icons-material/Cancel';
+import React, { useState } from 'react';
+import { Box, Stack, TextField, Button } from '@mui/material';
+import QuizzGrid from './components/QuizzGrid';
+import CreateQuizzButton from './components/CreateQuizzButton';
 import AddIcon from '@mui/icons-material/Add';
 import { useRouter } from 'next/navigation';
+import PageContainer from '@/app/(DashboardLayout)/components/container/PageContainer';
 
-interface Campaign {
+interface Quiz {
   id: string;
-  name: string;
-  startDate: string;
-  endDate: string;
-  status: 'ENDED' | 'NOT_ACCEPTED' | 'PENDING';
-  initial: number;
-  remaining: number;
-  paid: boolean;
+  title: string;
+  description: string;
+  createdDate: string;
+  imageUrl: string;
 }
 
-const CampaignPage = () => {
+const QuizPage = () => {
   const router = useRouter();
   const [searchTerm, setSearchTerm] = useState('');
-  
-  const columns: GridColDef[] = [
-    { field: 'id', headerName: 'ID', width: 90 },
-    { field: 'name', headerName: 'Name', width: 200 },
-    { field: 'startDate', headerName: 'Start Date', width: 130 },
-    { field: 'endDate', headerName: 'End Date', width: 130 },
-    { field: 'status', headerName: 'Status', width: 130 },
-    { field: 'initial', headerName: 'Initial', width: 100 },
-    { 
-      field: 'remaining', 
-      headerName: 'Remaining', 
-      width: 130,
-      renderCell: (params) => `${params.value}%` 
-    },
-    {
-      field: 'paid',
-      headerName: 'Paid',
-      width: 100,
-      renderCell: (params) => (
-        params.value ? 
-          <CheckCircleIcon color="success" /> : 
-          <CancelIcon color="error" />
-      )
-    },
-    {
-      field: 'actions',
-      headerName: 'Actions',
-      width: 100,
-      renderCell: (params) => (
-        <IconButton 
-          onClick={() => handleDelete(params.row.id)}
-          color="error"
-        >
-          <DeleteIcon />
-        </IconButton>
-      )
-    }
-  ];
 
   // Sample data - replace with actual API call
-  const rows: Campaign[] = [
+  const quizzes: Quiz[] = [
     {
       id: '1',
-      name: 'Summer Campaign',
-      startDate: '2024-01-01',
-      endDate: '2024-02-01',
-      status: 'PENDING',
-      initial: 1000,
-      remaining: 75,
-      paid: true
+      title: 'Sample Quiz 1',
+      description: 'This is a description for Sample Quiz 1',
+      createdDate: '2025-01-01',
+      imageUrl: '/images/quizzes/quiz.jpg',
+    },
+    {
+      id: '2',
+      title: 'Sample Quiz 2',
+      description: 'This is a description for Sample Quiz 2',
+      createdDate: '2025-01-02',
+      imageUrl: '/images/quizzes/quiz.jpg',
+    },
+    {
+      id: '3',
+      title: 'Sample Quiz 3',
+      description: 'This is a description for Sample Quiz 3',
+      createdDate: '2025-01-02',
+      imageUrl: '/images/quizzes/quiz.jpg',
     },
     // Add more sample data as needed
   ];
 
-  const handleDelete = (id: string) => {
-    console.log('Delete campaign:', id);
-    // Implement delete logic
-  };
-
-  const filteredRows = rows.filter(row =>
-    row.name.toLowerCase().includes(searchTerm.toLowerCase())
+  const filteredQuizzes = quizzes.filter((quiz) =>
+    quiz.title.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   return (
-    <PageContainer title="Campaigns" description="Campaign Management">
-      <Box sx={{ height: 600, width: '100%' }}>
+    <PageContainer title="Quizzes" description="Quiz Management">
+      <Box sx={{ width: '100%', padding: 2 }}>
         <Stack
           direction="row"
           justifyContent="space-between"
@@ -103,7 +60,7 @@ const CampaignPage = () => {
           sx={{ mb: 3 }}
         >
           <TextField
-            label="Search Campaigns"
+            label="Search Quizzes"
             variant="outlined"
             size="small"
             value={searchTerm}
@@ -113,26 +70,15 @@ const CampaignPage = () => {
             variant="contained"
             color="primary"
             startIcon={<AddIcon />}
-            onClick={() => router.push('/campaign/create')}
+            onClick={() => router.push('/quizzes/create')}
           >
-            Create Campaign
+            Create Quizz
           </Button>
         </Stack>
-        
-        <DataGrid
-          rows={filteredRows}
-          columns={columns}
-          initialState={{
-            pagination: {
-              paginationModel: { pageSize: 5, page: 0 },
-            },
-          }}
-          pageSizeOptions={[5]}
-          checkboxSelection
-        />
+        <QuizzGrid quizzes={filteredQuizzes} />
       </Box>
     </PageContainer>
   );
 };
 
-export default CampaignPage;
+export default QuizPage;
