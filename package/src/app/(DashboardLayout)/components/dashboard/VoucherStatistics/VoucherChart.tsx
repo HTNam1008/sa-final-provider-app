@@ -72,14 +72,22 @@ const VoucherChart: React.FC<VoucherChartProps> = ({ data, labels }) => {
   };
 
   return (
-    <DashboardCard title="Voucher Statistics">
-      <Box>
-        <Typography variant="h6" gutterBottom>
-          Statistics Overview
-        </Typography>
-        <Line data={chartData} options={options} />
-      </Box>
-    </DashboardCard>
+    <Box
+      sx={{
+        boxShadow: theme.shadows[3],
+        borderRadius: 2,
+        overflow: 'hidden',
+      }}
+    >
+      <DashboardCard title="Voucher Statistics">
+        <Box>
+          <Typography variant="h6" gutterBottom>
+            Statistics Overview
+          </Typography>
+          <Line data={chartData} options={options} />
+        </Box>
+      </DashboardCard>
+    </Box>
   );
 };
 

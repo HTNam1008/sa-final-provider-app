@@ -79,7 +79,7 @@ export default function CreateStore() {
                 <Box
                   component="img"
                   src={previewUrl}
-                  sx={{ width: 200, height: 200, objectFit: 'cover', borderRadius: 1 }}
+                  sx={{ width: 200, height: 200, objectFit: 'cover'}}
                 />
               )}
               <Button

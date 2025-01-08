@@ -1,5 +1,5 @@
 import React from 'react';
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TableSortLabel, IconButton } from '@mui/material';
+import {Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TableSortLabel, IconButton } from '@mui/material';
 import { Campaign } from '../types';
 
 interface CampaignTableProps {
@@ -9,7 +9,15 @@ interface CampaignTableProps {
 
 const CampaignTable: React.FC<CampaignTableProps> = ({ campaigns, onDelete }) => {
   return (
-    <TableContainer>
+    <Paper 
+      elevation={3} 
+      style={{ margin: '20px', borderRadius: '8px', overflow: 'hidden' }}
+    >
+      <TableContainer style={{
+          border: '1px solid #ccc', 
+          borderRadius: '8px',
+          boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.1)'
+        }}>
       <Table>
         <TableHead>
           <TableRow>
@@ -38,7 +46,7 @@ const CampaignTable: React.FC<CampaignTableProps> = ({ campaigns, onDelete }) =>
               <TableCell>{campaign.status}</TableCell>
               <TableCell>{campaign.initial}</TableCell>
               <TableCell>{campaign.remaining}</TableCell>
-              <TableCell>{campaign.paid ? '✔️' : '❌'}</TableCell>
+              <TableCell align="center" sx={{ verticalAlign: 'middle' }}>{campaign.paid ? '✔️' : '❌'}</TableCell>
               <TableCell>
                 <IconButton onClick={() => onDelete(campaign.id)}>
                   🗑️
@@ -49,6 +57,7 @@ const CampaignTable: React.FC<CampaignTableProps> = ({ campaigns, onDelete }) =>
         </TableBody>
       </Table>
     </TableContainer>
+    </Paper>
   );
 };
 

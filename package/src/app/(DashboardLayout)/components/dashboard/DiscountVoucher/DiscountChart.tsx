@@ -60,17 +60,16 @@ const DiscountChart: React.FC<DiscountChartProps> = ({ data }) => {
   };
 
   return (
-    <DashboardCard title="Discount Voucher Statistics">
-      <Bar data={chartData} options={options} />
-    </DashboardCard>
-  );
-  
-  return (
-    <Box>
-      <Typography variant="h6" gutterBottom>
-        Discount Voucher Statistics
-      </Typography>
-      <Bar data={chartData} options={options} />
+    <Box
+      sx={{
+        boxShadow: theme.shadows[3],
+        borderRadius: 2,
+        overflow: 'hidden',
+      }}
+    >
+      <DashboardCard title="Discount Voucher Statistics">
+        <Bar data={chartData} options={options} />
+      </DashboardCard>
     </Box>
   );
 };

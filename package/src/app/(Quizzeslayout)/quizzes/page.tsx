@@ -1,6 +1,6 @@
 'use client'
 import React, { useState } from 'react';
-import { Box, Stack, TextField, Button } from '@mui/material';
+import {Typography, Box, Stack, TextField, Button } from '@mui/material';
 import QuizzGrid from './components/QuizzGrid';
 import CreateQuizzButton from './components/CreateQuizzButton';
 import AddIcon from '@mui/icons-material/Add';
@@ -51,6 +51,17 @@ const QuizPage = () => {
 
   return (
     <PageContainer title="Quizzes" description="Quiz Management">
+      <Stack
+          direction="row"
+          justifyContent="space-between"
+          alignItems="center"
+          spacing={2}
+          sx={{ mb: 3 }}
+        >
+          <Typography variant="h2" component="h1">
+            Quizz Management
+          </Typography>
+        </Stack>
       <Box sx={{ width: '100%', padding: 2 }}>
         <Stack
           direction="row"

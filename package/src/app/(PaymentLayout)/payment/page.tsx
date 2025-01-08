@@ -5,7 +5,8 @@ import {
   Button,
   TextField,
   IconButton,
-  Stack
+  Stack,
+  Typography
 } from '@mui/material';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import PageContainer from '@/app/(DashboardLayout)/components/container/PageContainer';
@@ -71,6 +72,17 @@ const PaymentPage = () => {
 
   return (
     <PageContainer title="Payments" description="Payment Management">
+      <Stack
+          direction="row"
+          justifyContent="space-between"
+          alignItems="center"
+          spacing={2}
+          sx={{ mb: 3 }}
+        >
+          <Typography variant="h2" component="h1">
+            Payment Management
+          </Typography>
+        </Stack>
       <Box sx={{ height: 600, width: '100%' }}>
         <Stack
           direction="row"
@@ -91,6 +103,19 @@ const PaymentPage = () => {
         <DataGrid
           rows={filteredRows}
           columns={columns}
+          sx={{
+            border: '1px solid #ccc',
+            borderRadius: '8px',
+            boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.1)',
+            backgroundColor: '#fff',
+            '& .MuiDataGrid-columnHeaders': {
+              fontWeight: 'bold',
+              borderBottom: '2px solid #ddd',
+            },
+            '& .MuiDataGrid-cell': {
+              borderBottom: '1px solid #e0e0e0',
+            },
+          }}
           initialState={{
             pagination: {
               paginationModel: { pageSize: 5, page: 0 },

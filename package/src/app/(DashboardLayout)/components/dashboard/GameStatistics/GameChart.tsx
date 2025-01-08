@@ -1,5 +1,6 @@
 import dynamic from "next/dynamic";
-import { useTheme } from '@mui/material/styles';
+import {useTheme } from '@mui/material/styles';
+import {Box } from '@mui/material';
 import { ApexOptions } from 'apexcharts';
 import { useEffect, useState } from "react";
 import DashboardCard from "../../shared/DashboardCard";
@@ -43,15 +44,23 @@ const GameChart = ({ data }: GameChartProps) => {
   }, [data]);
 
   return (
-    <DashboardCard title="Game Statistics">
-      <Chart 
-        options={options}
-        series={series}
-        type="pie"
-        height={350}
-        width={'100%'}
-      />
-    </DashboardCard>
+    <Box
+      sx={{
+        boxShadow: theme.shadows[3],
+        borderRadius: 2,
+        overflow: 'hidden',
+      }}
+    >
+      <DashboardCard title="Game Statistics">
+        <Chart
+          options={options}
+          series={series}
+          type="pie"
+          height={350}
+          width={'100%'}
+        />
+      </DashboardCard>
+    </Box>
   );
 };
 

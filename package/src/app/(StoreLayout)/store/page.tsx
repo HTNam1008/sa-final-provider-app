@@ -76,6 +76,17 @@ const StorePage = () => {
 
   return (
     <PageContainer title="Stores" description="Store Management">
+      <Stack
+          direction="row"
+          justifyContent="space-between"
+          alignItems="center"
+          spacing={2}
+          sx={{ mb: 3 }}
+        >
+          <Typography variant="h2" component="h1">
+            Store Management
+          </Typography>
+      </Stack>
       <Stack direction="row" justifyContent="flex-end" sx={{ mb: 2 }}>
         <Button
           variant="contained"

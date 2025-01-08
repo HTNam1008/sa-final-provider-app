@@ -1,5 +1,5 @@
 'use client'
-import { Grid, Box } from '@mui/material';
+import { Grid, Box, Stack, Typography } from '@mui/material';
 import PageContainer from '@/app/(DashboardLayout)/components/container/PageContainer';
 // components
 import GeneralStatistics from '@/app/(DashboardLayout)/components/dashboard/GeneralStatistics';
@@ -10,6 +10,17 @@ import VoucherStatistics from '@/app/(DashboardLayout)/components/dashboard/Vouc
 const Dashboard = () => {
   return (
     <PageContainer title="Dashboard" description="Campaign Statistics Dashboard">
+      <Stack
+          direction="row"
+          justifyContent="space-between"
+          alignItems="center"
+          spacing={2}
+          sx={{ mb: 3 }}
+        >
+          <Typography variant="h2" component="h1">
+            Dashboard
+          </Typography>
+        </Stack>
       <Box>
         <Grid container spacing={3}>
           {/* General Statistics */}
