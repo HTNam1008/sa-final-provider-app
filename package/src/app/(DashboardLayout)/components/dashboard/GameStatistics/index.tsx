@@ -1,10 +1,13 @@
 import React, { useEffect, useState } from 'react';
+
 import {
   Box,
   FormControl,
   InputLabel,
   Select,
   MenuItem,
+  CircularProgress,
+  Typography
 } from '@mui/material';
 import GameChart from './GameChart';
 
@@ -14,6 +17,22 @@ interface GameData {
   realtimeQuizz: number;
   lacXi: number;
 }
+
+
+// const MOCK_DATA: Record<CampaignKey, { realtimeQuizz: number; lacXi: number }> = {
+//   'campaign1': {
+//     realtimeQuizz: 150,
+//     lacXi: 100,
+//   },
+//   'campaign2': {
+//     realtimeQuizz: 200,
+//     lacXi: 180,
+//   },
+//   'campaign3': {
+//     realtimeQuizz: 120,
+//     lacXi: 90,
+//   },
+// };
 
 const MOCK_DATA: Record<CampaignKey, { realtimeQuizz: number; lacXi: number }> = {
   'campaign1': {
@@ -29,6 +48,7 @@ const MOCK_DATA: Record<CampaignKey, { realtimeQuizz: number; lacXi: number }> =
     lacXi: 90,
   },
 };
+
 
 const GameStatistics = () => {
   const [campaign, setCampaign] = useState<CampaignKey>('campaign1');
@@ -74,7 +94,13 @@ const GameStatistics = () => {
         </FormControl>
       </Box>
 
-      <GameChart data={MOCK_DATA[campaign]} />
+      {loading ? (
+        <CircularProgress />
+      ) : error ? (
+        <Typography color="error">{error}</Typography>
+      ) : (
+        data && <GameChart data={data} />
+      )}
     </Box>
   );
 };

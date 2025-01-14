@@ -6,7 +6,8 @@ import {
   TextField,
   IconButton,
   Stack,
-  Typography
+  Typography,
+  CircularProgress
 } from '@mui/material';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import PageContainer from '@/app/(DashboardLayout)/components/container/PageContainer';
@@ -129,19 +130,38 @@ const CampaignPage = () => {
   ];
 
   // Sample data - replace with actual API call
-  const rows: Campaign[] = [
-    {
-      id: '1',
-      name: 'Summer Campaign',
-      startDate: '2024-01-01',
-      endDate: '2024-02-01',
-      status: 'PENDING',
-      initial: 1000,
-      remaining: 75,
-      paid: true
-    },
-    // Add more sample data as needed
-  ];
+  // const rows: Campaign[] = [
+  //   {
+  //     id: '1',
+  //     name: 'Summer Campaign',
+  //     startDate: '2024-01-01',
+  //     endDate: '2024-02-01',
+  //     status: 'PENDING',
+  //     initial: 1000,
+  //     remaining: 75,
+  //     paid: true
+  //   },
+  //   // Add more sample data as needed
+  // ];
+
+  useEffect(() => {
+    const fetchCampaigns = async () => {
+      try {
+        const response = await fetch('/api/campaigns');
+        if (!response.ok) {
+          throw new Error('Failed to fetch campaigns');
+        }
+        const data = await response.json();
+        setCampaigns(data);
+      } catch (error) {
+        setError((error as Error).message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchCampaigns();
+  }, []);
 
   const handleDelete = (id: string) => {
     console.log('Delete campaign:', id);
@@ -284,7 +304,7 @@ const CampaignPage = () => {
   return (
     <PageContainer title="Campaigns" description="Campaign Management">
       <Box sx={{ height: 600, width: '100%' }}>
-      <Stack
+        <Stack
           direction="row"
           justifyContent="space-between"
           alignItems="center"

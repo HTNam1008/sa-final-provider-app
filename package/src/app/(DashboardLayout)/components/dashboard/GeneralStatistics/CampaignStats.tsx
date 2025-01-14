@@ -8,6 +8,7 @@ const CampaignStats = () => {
     type TimeFrame = 'today' | 'week' | 'month' | 'year';
     const theme = useTheme();
     const [timeFrame, setTimeFrame] = React.useState<TimeFrame>('today');
+
     const [loading, setLoading] = useState<boolean>(false);
     const [error, setError] = useState<string | null>(null);
     const [total, setTotal] = useState<number>(0);
@@ -92,5 +93,4 @@ const CampaignStats = () => {
         </Box>
     );
 };
-
 export default CampaignStats;

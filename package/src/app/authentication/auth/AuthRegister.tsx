@@ -64,7 +64,14 @@ const AuthRegister = ({ title, subtitle, subtext }: RegisterType) => {
           </Typography>
         ) : null}
 
-        {subtext}
+const AuthRegister = ({ title, subtitle, subtext }: RegisterType) => {
+    const [formData, setFormData] = useState<RegisterData>({
+        name: "",
+        email: "",
+        password: "",
+    });
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState("");
 
         <Box>
           <Stack mb={3}>
