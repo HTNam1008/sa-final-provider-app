@@ -154,3 +154,102 @@ const AuthRegister = ({ title, subtitle, subtext }: RegisterType) => {
 };
 
 export default AuthRegister;
+//   return (
+//     <>
+//       <form onSubmit={handleSubmit}>
+//         {title ? (
+//           <Typography fontWeight="700" variant="h2" mb={1}>
+//             {title}
+//           </Typography>
+//         ) : null}
+
+//         {subtext}
+
+//         <Box>
+//           <Stack mb={3}>
+//             <Typography
+//               variant="subtitle1"
+//               fontWeight={600}
+//               component="label"
+//               htmlFor="name"
+//               mb="5px"
+//             >
+//               Name
+//             </Typography>
+//             <CustomTextField
+//               id="username"
+//               name="username"
+//               value={formData.username}
+//               onChange={handleChange}
+//               variant="outlined"
+//               fullWidth
+//             />
+
+//             <Typography
+//               variant="subtitle1"
+//               fontWeight={600}
+//               component="label"
+//               htmlFor="email"
+//               mb="5px"
+//               mt="25px"
+//             >
+//               Email Address
+//             </Typography>
+//             <CustomTextField
+//               id="email"
+//               name="email"
+//               value={formData.email}
+//               onChange={handleChange}
+//               variant="outlined"
+//               fullWidth
+//             />
+
+//             <Typography
+//               variant="subtitle1"
+//               fontWeight={600}
+//               component="label"
+//               htmlFor="password"
+//               mb="5px"
+//               mt="25px"
+//             >
+//               Password
+//             </Typography>
+//             <CustomTextField
+//               id="password"
+//               name="password"
+//               type="password"
+//               value={formData.password}
+//               onChange={handleChange}
+//               variant="outlined"
+//               fullWidth
+//             />
+//           </Stack>
+//           {error && (
+//             <Typography color="error" mt={2}>
+//               {error}
+//             </Typography>
+//           )}
+//           <Button
+//             color="primary"
+//             variant="contained"
+//             size="large"
+//             fullWidth
+//             type="submit"
+//             disabled={loading}
+//           >
+//             {loading ? <CircularProgress size={24} /> : "Sign Up"}
+//           </Button>
+//         </Box>
+//         {subtitle}
+//       </form>
+
+//       <OTPDialog
+//         open={openOTP}
+//         onClose={() => setOpenOTP(false)}
+//         email={formData.email}
+//       />
+//     </>
+//   );
+// };
+
+// export default AuthRegister;
