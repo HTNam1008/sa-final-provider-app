@@ -22,32 +22,55 @@ import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import PageContainer from '@/app/(DashboardLayout)/components/container/PageContainer';
 import { useRouter } from 'next/navigation';
 import { Dayjs } from 'dayjs';
+import axios from 'axios';
 
 // Update interface for form data
 interface FormData {
     name: string;
-    initialVouchers: number;
+    // initialVouchers: number;
     category: string;
-    startDate: Dayjs | null;
+    start: Dayjs | null;
     endDate: Dayjs | null;
     description: string;
 }
+interface VoucherRequest {
+    code: string;
+    price: number;
+    qr: string;
+    image: string;
+    description: string;
+    status: string;
+    initQuantity: number;
+    currentQuantity: number;
+    expired: string;
+}
 
+interface CampaignRequest {
+    name: string;
+    start: string;
+    endDate: string;
+    vouchers: VoucherRequest[];
+}
 
 const categories = ['Food', 'Music', 'Restaurant', 'Car', 'Shopping', 'Drink'];
 
 interface VoucherType {
+    code: String;
     quantity: number;
-    discount: number;
+    price: number;
 }
 
 export default function CreateCampaign() {
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState<string | null>(null);
+    const [success, setSuccess] = useState(false);
+
     // Update state initialization
     const [formData, setFormData] = useState<FormData>({
         name: '',
-        initialVouchers: 0,
+        // initialVouchers: 0,
         category: '',
-        startDate: null,
+        start: null,
         endDate: null,
         description: ''
     });
@@ -70,12 +93,53 @@ export default function CreateCampaign() {
     };
 
     const handleAddVoucherType = () => {
-        setVoucherTypes([...voucherTypes, { quantity: 0, discount: 0 }]);
+        setVoucherTypes([...voucherTypes, { quantity: 1, price: 10, code: ""}]);
     };
 
     const handleCreateCampaign = async () => {
-        // Handle campaign creation
-        router.push('/campaign');
+        if (!formData.name || !formData.start || !formData.endDate || voucherTypes.length === 0) {
+            setError('Please fill in all required fields');
+            return;
+        }
+
+        setLoading(true);
+        try {
+            const token = localStorage.getItem('token');
+            
+            const voucherRequests: VoucherRequest[] = voucherTypes.map(vType => ({
+                code: vType.code.toString(),
+                price: vType.price,
+                qr: "https://example.com/qr/ny2025",
+                image: "https://example.com/images/voucher.png",
+                description: formData.description,
+                status: "ACTIVE",
+                initQuantity: vType.quantity,
+                currentQuantity: vType.quantity,
+                expired: formData.endDate?.toISOString() || new Date().toISOString()
+            }));
+
+            const campaignRequest: CampaignRequest = {
+                name: formData.name,
+                start: formData.start.toISOString(),
+                endDate: formData.endDate.toISOString(),
+                vouchers: voucherRequests
+            };
+
+            await axios.post('/api/events/create', campaignRequest, {
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            setSuccess(true);
+            router.push('/campaign');
+
+        } catch (err: any) {
+            setError(err.response?.data?.message || 'Failed to create campaign');
+        } finally {
+            setLoading(false);
+        }
     };
 
     return (
@@ -109,14 +173,14 @@ export default function CreateCampaign() {
                         onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                     />
 
-                    <TextField
+                    {/* <TextField
                         required
                         fullWidth
                         type="number"
                         label="Initial Vouchers"
                         value={formData.initialVouchers}
                         onChange={(e) => setFormData({ ...formData, initialVouchers: Number(e.target.value) })}
-                    />
+                    /> */}
 
                     {/* Voucher Types Expansion */}
                     <Paper sx={{ p: 2 }}>
@@ -129,6 +193,19 @@ export default function CreateCampaign() {
                         <Collapse in={expandVouchers}>
                             {voucherTypes.map((type, index) => (
                                 <Grid container spacing={2} key={index} sx={{ mt: 1 }}>
+                                    <Grid item xs={6}>
+                                        <TextField
+                                            fullWidth
+                                            type="string"
+                                            label="Code"
+                                            value={type.code}
+                                            onChange={(e) => {
+                                                const newTypes = [...voucherTypes];
+                                                newTypes[index].code = String(e.target.value);
+                                                setVoucherTypes(newTypes);
+                                            }}
+                                        />
+                                    </Grid>
                                     <Grid item xs={6}>
                                         <TextField
                                             fullWidth
@@ -147,10 +224,10 @@ export default function CreateCampaign() {
                                             fullWidth
                                             type="number"
                                             label="Discount (%)"
-                                            value={type.discount}
+                                            value={type.price}
                                             onChange={(e) => {
                                                 const newTypes = [...voucherTypes];
-                                                newTypes[index].discount = Number(e.target.value);
+                                                newTypes[index].price = Number(e.target.value);
                                                 setVoucherTypes(newTypes);
                                             }}
                                         />
@@ -184,8 +261,8 @@ export default function CreateCampaign() {
                         <Stack direction="row" spacing={2}>
                             <DatePicker
                                 label="Start Date"
-                                value={formData.startDate}
-                                onChange={(newValue) => setFormData({ ...formData, startDate: newValue })}
+                                value={formData.start}
+                                onChange={(newValue) => setFormData({ ...formData, start: newValue })}
                             />
                             <DatePicker
                                 label="End Date"

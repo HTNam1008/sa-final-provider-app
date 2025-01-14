@@ -20,7 +20,7 @@ const Dashboard = () => {
           <Typography variant="h2" component="h1">
             Dashboard
           </Typography>
-        </Stack>
+      </Stack>
       <Box>
         <Grid container spacing={3}>
           {/* General Statistics */}

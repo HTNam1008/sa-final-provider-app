@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
+
 import {
   Box,
   FormControl,
@@ -17,6 +18,7 @@ interface GameData {
   lacXi: number;
 }
 
+
 // const MOCK_DATA: Record<CampaignKey, { realtimeQuizz: number; lacXi: number }> = {
 //   'campaign1': {
 //     realtimeQuizz: 150,
@@ -32,6 +34,22 @@ interface GameData {
 //   },
 // };
 
+const MOCK_DATA: Record<CampaignKey, { realtimeQuizz: number; lacXi: number }> = {
+  'campaign1': {
+    realtimeQuizz: 150,
+    lacXi: 100,
+  },
+  'campaign2': {
+    realtimeQuizz: 200,
+    lacXi: 180,
+  },
+  'campaign3': {
+    realtimeQuizz: 120,
+    lacXi: 90,
+  },
+};
+
+
 const GameStatistics = () => {
   const [campaign, setCampaign] = useState<CampaignKey>('campaign1');
   const [data, setData] = useState<GameData | null>(null);
@@ -43,7 +61,7 @@ const GameStatistics = () => {
       setLoading(true);
       setError(null);
       try {
-        const response = await fetch(`https://api.example.com/campaigns/${campaign}`);
+        const response = await fetch(`api/events/all`);
         if (!response.ok) {
           throw new Error('Failed to fetch data');
         }
