@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Box,
   FormControl,
@@ -9,6 +9,11 @@ import {
 import GameChart from './GameChart';
 
 type CampaignKey = 'campaign1' | 'campaign2' | 'campaign3';
+
+interface GameData {
+  realtimeQuizz: number;
+  lacXi: number;
+}
 
 const MOCK_DATA: Record<CampaignKey, { realtimeQuizz: number; lacXi: number }> = {
   'campaign1': {
@@ -27,6 +32,30 @@ const MOCK_DATA: Record<CampaignKey, { realtimeQuizz: number; lacXi: number }> =
 
 const GameStatistics = () => {
   const [campaign, setCampaign] = useState<CampaignKey>('campaign1');
+  const [data, setData] = useState<GameData | null>(null);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      setLoading(true);
+      setError(null);
+      try {
+        const response = await fetch(`api/events/all`);
+        if (!response.ok) {
+          throw new Error('Failed to fetch data');
+        }
+        const result: GameData = await response.json();
+        setData(result);
+      } catch (err: any) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, [campaign]);
 
   return (
     <Box>

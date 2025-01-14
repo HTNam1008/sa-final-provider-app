@@ -1,20 +1,68 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Box, AppBar, Toolbar, styled, Stack, IconButton, Badge, Button } from '@mui/material';
 import PropTypes from 'prop-types';
 import Link from 'next/link';
 // components
 import Profile from './Profile';
 import { IconBellRinging, IconMenu } from '@tabler/icons-react';
+import axios from 'axios';
 
 interface ItemType {
   toggleMobileSidebar:  (event: React.MouseEvent<HTMLElement>) => void;
 }
 
+interface ProfileData {
+  id: string | null;
+  name: string | null;
+  industry: string | null;
+  address: string | null;
+  gps_lat: string | null;
+  gps_long: string | null;
+  status: string | null;
+  // add other profile fields as needed
+}
+
 const Header = ({toggleMobileSidebar}: ItemType) => {
+  const [profileName, setProfileName] = useState<string>("New User");
+  const [profile, setProfile] = useState<ProfileData | null>(null);
+  const [loading, setLoading] = useState(true);
 
-  // const lgUp = useMediaQuery((theme) => theme.breakpoints.up('lg'));
-  // const lgDown = useMediaQuery((theme) => theme.breakpoints.down('lg'));
+  useEffect(() => {
+    const fetchProfile = async () => {
+      const token = localStorage.getItem('token');
+      if (!token) {
+        setLoading(false);
+        return;
+      }
+      
+      const id = localStorage.getItem('id');
+      
+      if (!id) {
+        setLoading(false);
+        return;
+      }
 
+      try {
+        const response = await axios.get(
+          `/api/users/${id}/profile/brand`,
+          {
+            headers: {
+              'Authorization': `Bearer ${token}`,
+              'Content-Type': 'application/json'
+            },
+          },
+        );
+        setProfile(response.data);
+        setProfileName(response.data.name || "New User");
+      } catch (error) {
+        console.error('Error fetching profile:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProfile();
+  }, []);
 
   const AppBarStyled = styled(AppBar)(({ theme }) => ({
     boxShadow: 'none',
@@ -62,10 +110,19 @@ const Header = ({toggleMobileSidebar}: ItemType) => {
         </IconButton>
         <Box flexGrow={1} />
         <Stack spacing={1} direction="row" alignItems="center">
-          <Button variant="contained" component={Link} href="/authentication/login"   disableElevation color="primary" >
-            Login
-          </Button>
-          <Profile />
+          {!loading && (
+            <Button 
+              variant="contained" 
+              component={Link} 
+              href={profileName == "New User" ? "/authentication/updateProfile" : "/authentication/login"}     
+              disableElevation 
+              color="primary"
+            >
+              {profileName || "Login"} 
+            </Button>
+          )}
+          {/* {profile && <Profile profileData={profile} />} */}
+           <Profile/>
         </Stack>
       </ToolbarStyled>
     </AppBarStyled>
@@ -75,5 +132,5 @@ const Header = ({toggleMobileSidebar}: ItemType) => {
 Header.propTypes = {
   sx: PropTypes.object,
 };
-
+// }
 export default Header;

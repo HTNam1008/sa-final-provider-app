@@ -23,7 +23,7 @@ interface LoginType {
 }
 
 interface LoginData {
-  username: string;
+  email: string;
   password: string;
 }
 
@@ -31,7 +31,7 @@ const AuthLogin = ({ title, subtitle, subtext }: LoginType) => {
   const router = useRouter();
   const [mounted, setMounted] = useState(false);
   const [formData, setFormData] = useState<LoginData>({
-    username: "",
+    email: "",
     password: "",
   });
   const [loading, setLoading] = useState(false);
@@ -56,9 +56,16 @@ const AuthLogin = ({ title, subtitle, subtext }: LoginType) => {
     setError("");
 
     try {
-      const response = await axios.post("/api/auth/login", formData);
+      const response = await axios.post("/api/auth/login", formData,
+        {
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        }
+      );
       localStorage.setItem("token", response.data.token);
-      router.push("/dashboard");
+      localStorage.setItem("id", response.data.id);
+      router.push("/");
     } catch (err) {
       setError("Invalid credentials");
     } finally {
@@ -86,18 +93,18 @@ const AuthLogin = ({ title, subtitle, subtext }: LoginType) => {
             variant="subtitle1"
             fontWeight={600}
             component="label"
-            htmlFor="username"
+            htmlFor="email"
             mb="5px"
           >
-            Username
+            Email
           </Typography>
           <CustomTextField
-            name="username"
-            value={formData.username}
+            name="email"
+            value={formData.email}
             onChange={handleChange}
             variant="outlined"
             fullWidth
-            data-testid="username-input"
+            data-testid="email-input"
           />
         </Box>
         <Box mt="25px">
