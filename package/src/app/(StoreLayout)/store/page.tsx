@@ -1,5 +1,5 @@
 'use client'
-import { useState } from 'react';
+import {useState, useEffect } from 'react';
 import { 
   Box, 
   Button,
@@ -38,27 +38,23 @@ const StorePage = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedStore, setSelectedStore] = useState<Store | null>(null);
   const [center, setCenter] = useState({ lat: 10.762622, lng: 106.660172 }); // Ho Chi Minh City
+  const [stores, setStores] = useState<Store[]>([]);
 
-  // Sample data
-  const stores: Store[] = [
-    {
-      id: '1',
-      name: 'Store One',
-      avatar: '/store1.jpg',
-      operatingHours: '9:00 AM - 10:00 PM',
-      description: 'Main branch store in District 1',
-      location: { lat: 10.762622, lng: 106.660172 }
-    },
-    {
-      id: '2',
-      name: 'Store Two',
-      avatar: '/store1.jpg',
-      operatingHours: '9:00 AM - 10:00 PM',
-      description: 'Main branch store in District 1',
-      location: { lat: 10.8603735, lng: 106.7788311 }
-    },
-    // Add more sample stores
-  ];
+
+  const fetchStores = async () => {
+    try {
+      const response = await fetch('/api/stores'); // Đường dẫn API
+      const data = await response.json();
+      setStores(data); // Cập nhật state với dữ liệu API trả về
+    } catch (error) {
+      console.error('Error fetching stores:', error);
+    }
+  };
+
+  // Gọi API khi component được render lần đầu
+  useEffect(() => {
+    fetchStores();
+  }, []);
 
   const filteredStores = stores.filter(store =>
     store.name.toLowerCase().includes(searchTerm.toLowerCase())
