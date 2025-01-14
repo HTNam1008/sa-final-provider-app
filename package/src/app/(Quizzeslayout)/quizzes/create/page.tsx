@@ -48,16 +48,46 @@ export default function CreateQuiz() {
     setQuestions(updatedQuestions)
   }
 
-  const handleCreateQuiz = async () => {
-    // Handle quiz creation
-    router.push('/quiz')
-  }
-
   const handleOptionChange = (questionIndex: number, optionIndex: number, value: string, isCorrect: boolean) => {
     const updatedQuestions = [...questions]
     updatedQuestions[questionIndex].options[optionIndex].option = value
     updatedQuestions[questionIndex].options[optionIndex].isCorrect = isCorrect
     setQuestions(updatedQuestions)
+  }
+
+  const handleCreateQuiz = async () => {
+    const quizData = {
+      name: formData.name,
+      category: formData.category,
+      description: formData.description,
+      questions: questions.map((question) => ({
+        question: question.question,
+        options: question.options.map((option) => ({
+          option: option.option,
+          isCorrect: option.isCorrect,
+        })),
+        answer: question.answer,
+      })),
+    }
+
+    try {
+      const response = await fetch('/api/quizzes', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(quizData),
+      })
+
+      if (!response.ok) {
+        throw new Error('Failed to create quiz')
+      }
+
+      router.push('/quiz')
+    } catch (error) {
+      console.error('Error creating quiz:', error)
+      // Xử lý lỗi nếu có
+    }
   }
 
   return (
