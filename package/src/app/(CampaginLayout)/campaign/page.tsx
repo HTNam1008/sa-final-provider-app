@@ -1,12 +1,13 @@
 'use client'
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { 
   Box, 
   Button,
   TextField,
   IconButton,
   Stack,
-  Typography
+  Typography,
+  CircularProgress
 } from '@mui/material';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import PageContainer from '@/app/(DashboardLayout)/components/container/PageContainer';
@@ -30,6 +31,10 @@ interface Campaign {
 const CampaignPage = () => {
   const router = useRouter();
   const [searchTerm, setSearchTerm] = useState('');
+  const [campaigns, setCampaigns] = useState<Campaign[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  
   
   const columns: GridColDef[] = [
     { field: 'id', headerName: 'ID', width: 90 },
@@ -70,33 +75,52 @@ const CampaignPage = () => {
   ];
 
   // Sample data - replace with actual API call
-  const rows: Campaign[] = [
-    {
-      id: '1',
-      name: 'Summer Campaign',
-      startDate: '2024-01-01',
-      endDate: '2024-02-01',
-      status: 'PENDING',
-      initial: 1000,
-      remaining: 75,
-      paid: true
-    },
-    // Add more sample data as needed
-  ];
+  // const rows: Campaign[] = [
+  //   {
+  //     id: '1',
+  //     name: 'Summer Campaign',
+  //     startDate: '2024-01-01',
+  //     endDate: '2024-02-01',
+  //     status: 'PENDING',
+  //     initial: 1000,
+  //     remaining: 75,
+  //     paid: true
+  //   },
+  //   // Add more sample data as needed
+  // ];
+
+  useEffect(() => {
+    const fetchCampaigns = async () => {
+      try {
+        const response = await fetch('/api/campaigns');
+        if (!response.ok) {
+          throw new Error('Failed to fetch campaigns');
+        }
+        const data = await response.json();
+        setCampaigns(data);
+      } catch (error) {
+        setError((error as Error).message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchCampaigns();
+  }, []);
 
   const handleDelete = (id: string) => {
     console.log('Delete campaign:', id);
     // Implement delete logic
   };
 
-  const filteredRows = rows.filter(row =>
-    row.name.toLowerCase().includes(searchTerm.toLowerCase())
+  const filteredRows = campaigns.filter((campaign) =>
+    campaign.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   return (
     <PageContainer title="Campaigns" description="Campaign Management">
       <Box sx={{ height: 600, width: '100%' }}>
-      <Stack
+        <Stack
           direction="row"
           justifyContent="space-between"
           alignItems="center"
