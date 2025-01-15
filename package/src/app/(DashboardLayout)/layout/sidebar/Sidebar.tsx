@@ -1,7 +1,8 @@
-import { useMediaQuery, Box, Drawer } from "@mui/material";
+import { useMediaQuery, Box, Drawer, Typography } from "@mui/material";
 import SidebarItems from "./SidebarItems";
 import { Upgrade } from "./Updrade";
 import { Sidebar, Logo } from 'react-mui-sidebar';
+import CardGiftcard from '@mui/icons-material/CardGiftcard'; 
 
 interface ItemType {
   isMobileSidebarOpen: boolean;
@@ -72,7 +73,12 @@ const MSidebar = ({
               {/* ------------------------------------------- */}
               {/* Logo */}
               {/* ------------------------------------------- */}
-              <Logo img="/images/logos/dark-logo.svg" />
+              <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 2 }}>
+                <CardGiftcard sx={{ fontSize: 40, color: "#5d87ff", marginRight: 2 }} />
+                <Typography variant="h2" sx={{ color: "#5d87ff" }} >
+                  VOU
+                </Typography>
+              </Box>
               <Box>
                 {/* ------------------------------------------- */}
                 {/* Sidebar Items */}
@@ -117,7 +123,12 @@ const MSidebar = ({
           {/* ------------------------------------------- */}
           {/* Logo */}
           {/* ------------------------------------------- */}
-          <Logo img="/images/logos/dark-logo.svg" />
+          <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 2 }}>
+                <CardGiftcard sx={{ fontSize: 40, color: "#5d87ff", marginRight: 2 }} />
+                <Typography variant="h2" sx={{ color: "#5d87ff" }} >
+                  VOU
+                </Typography>
+              </Box>
           {/* ------------------------------------------- */}
           {/* Sidebar Items */}
           {/* ------------------------------------------- */}
