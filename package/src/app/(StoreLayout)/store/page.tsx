@@ -1,5 +1,5 @@
 'use client'
-import { useState } from 'react';
+import {useState, useEffect } from 'react';
 import { 
   Box, 
   Button,
@@ -33,36 +33,90 @@ interface Store {
   };
 }
 
+// Add mock data after interfaces
+const MOCK_STORES: Store[] = [
+  {
+    id: '1',
+    name: 'Highland Coffee Nguyen Hue',
+    avatar: 'https://play-lh.googleusercontent.com/9YKe7pdnCi4yTe2EPtKxF4VlqDL_qDyaWTrQxNWBxEyZGBs-e4GgVhGHNxTTmNF9UQ',
+    operatingHours: '7:00 AM - 10:00 PM',
+    description: 'Coffee shop in District 1, Ho Chi Minh City',
+    location: {
+      lat: 10.772912,
+      lng: 106.698825
+    }
+  },
+  {
+    id: '2',
+    name: 'Highland Coffee Le Loi',
+    avatar: 'https://play-lh.googleusercontent.com/9YKe7pdnCi4yTe2EPtKxF4VlqDL_qDyaWTrQxNWBxEyZGBs-e4GgVhGHNxTTmNF9UQ',
+    operatingHours: '7:00 AM - 11:00 PM',
+    description: 'Coffee shop near Ben Thanh Market',
+    location: {
+      lat: 10.767997,
+      lng: 106.695783
+    }
+  },
+  {
+    id: '3',
+    name: 'Highland Coffee Dong Khoi',
+    avatar: 'https://play-lh.googleusercontent.com/9YKe7pdnCi4yTe2EPtKxF4VlqDL_qDyaWTrQxNWBxEyZGBs-e4GgVhGHNxTTmNF9UQ',
+    operatingHours: '6:30 AM - 10:30 PM',
+    description: 'Premium coffee shop in city center',
+    location: {
+      lat: 10.776440,
+      lng: 106.701881
+    }
+  },
+  {
+    id: '4',
+    name: 'Highland Coffee Pham Ngu Lao',
+    avatar: 'https://play-lh.googleusercontent.com/9YKe7pdnCi4yTe2EPtKxF4VlqDL_qDyaWTrQxNWBxEyZGBs-e4GgVhGHNxTTmNF9UQ',
+    operatingHours: '7:00 AM - 12:00 AM',
+    description: 'Coffee shop in backpacker area',
+    location: {
+      lat: 10.767580,
+      lng: 106.693668
+    }
+  }
+];
+
+
 const StorePage = () => {
   const router = useRouter();
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedStore, setSelectedStore] = useState<Store | null>(null);
   const [center, setCenter] = useState({ lat: 10.762622, lng: 106.660172 }); // Ho Chi Minh City
+  const [stores, setStores] = useState<Store[]>(MOCK_STORES);
 
-  // Sample data
-  const stores: Store[] = [
-    {
-      id: '1',
-      name: 'Store One',
-      avatar: '/store1.jpg',
-      operatingHours: '9:00 AM - 10:00 PM',
-      description: 'Main branch store in District 1',
-      location: { lat: 10.762622, lng: 106.660172 }
-    },
-    {
-      id: '2',
-      name: 'Store Two',
-      avatar: '/store1.jpg',
-      operatingHours: '9:00 AM - 10:00 PM',
-      description: 'Main branch store in District 1',
-      location: { lat: 10.8603735, lng: 106.7788311 }
-    },
-    // Add more sample stores
-  ];
-
+  useEffect(() => {
+    // Get stores from localStorage
+    const savedStores = JSON.parse(localStorage.getItem('stores') || '[]');
+    setStores([...MOCK_STORES, ...savedStores]);
+  }, []);
+  
   const filteredStores = stores.filter(store =>
     store.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
+
+  // const fetchStores = async () => {
+  //   try {
+  //     const response = await fetch('/api/stores'); // Đường dẫn API
+  //     const data = await response.json();
+  //     setStores(data); // Cập nhật state với dữ liệu API trả về
+  //   } catch (error) {
+  //     console.error('Error fetching stores:', error);
+  //   }
+  // };
+
+  // // Gọi API khi component được render lần đầu
+  // useEffect(() => {
+  //   fetchStores();
+  // }, []);
+
+  // const filteredStores = stores.filter(store =>
+  //   store.name.toLowerCase().includes(searchTerm.toLowerCase())
+  // );
 
   const handleDirections = (store: Store) => {
     setCenter(store.location);
@@ -119,7 +173,7 @@ const StorePage = () => {
         </Paper>
 
         {/* Store List */}
-        <Paper sx={{ flex: 1, p: 2 }}>
+        <Paper sx={{ flex: 1, p: 2, overflowY: 'auto' }}>
           <TextField
             fullWidth
             label="Search Stores"
@@ -134,6 +188,15 @@ const StorePage = () => {
             {filteredStores.map((store) => (
               <ListItem
                 key={store.id}
+                sx={{ 
+                  mb: 2, 
+                  border: '1px solid',
+                  borderColor: 'divider',
+                  borderRadius: 1,
+                  '&:hover': {
+                    bgcolor: 'action.hover'
+                  }
+                }}
                 secondaryAction={
                   <Stack direction="row" spacing={1}>
                     <IconButton
@@ -154,7 +217,7 @@ const StorePage = () => {
                 }
               >
                 <ListItemAvatar>
-                  <Avatar src={store.avatar} />
+                  <Avatar src={store.avatar} alt={store.name} />
                 </ListItemAvatar>
                 <ListItemText
                   primary={store.name}

@@ -4,6 +4,7 @@ import Link from "next/link";
 import PageContainer from "@/app/(DashboardLayout)/components/container/PageContainer";
 import Logo from "@/app/(DashboardLayout)/layout/shared/logo/Logo";
 import AuthRegister from "../auth/AuthRegister";
+import CardGiftcard from '@mui/icons-material/CardGiftcard';
 
 const Register2 = () => (
   <PageContainer title="Register" description="this is Register page">
@@ -43,7 +44,12 @@ const Register2 = () => (
             sx={{ p: 4, zIndex: 1, width: "100%", maxWidth: "500px" }}
           >
             <Box display="flex" alignItems="center" justifyContent="center">
-              <Logo />
+            <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 2 }}>
+                <CardGiftcard sx={{ fontSize: 40, color: "#5d87ff", marginRight: 2 }} />
+                <Typography variant="h2" sx={{ color: "#5d87ff" }} >
+                  VOU
+                </Typography>
+              </Box>
             </Box>
             <AuthRegister
               subtext={

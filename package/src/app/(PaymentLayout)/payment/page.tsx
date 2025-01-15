@@ -1,5 +1,5 @@
 'use client'
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { 
   Box, 
   Button,
@@ -27,6 +27,7 @@ interface Payment {
 const PaymentPage = () => {
   const router = useRouter();
   const [searchTerm, setSearchTerm] = useState('');
+  const [rows, setRows] = useState<Payment[]>([]);
   
   const columns: GridColDef[] = [
     { field: 'id', headerName: 'ID', width: 100 },
@@ -49,17 +50,20 @@ const PaymentPage = () => {
     }
   ];
 
-  // Sample data - replace with actual API call
-  const rows: Payment[] = [
-    {
-      id: '1',
-      campaign: 'Summer Campaign',
-      date: '2024-01-01',
-      status: 'COMPLETED',
-      totalFee: 1000
-    },
-    // Add more sample data as needed
-  ];
+  const fetchPayments = async () => {
+    try {
+      const response = await fetch('/api/payments');
+      const data = await response.json();
+      setRows(data);
+    } catch (error) {
+      console.error('Error fetching payments:', error);
+    }
+  };
+
+  
+  useEffect(() => {
+    fetchPayments();
+  }, []);
 
   const handleDelete = (id: string) => {
     console.log('Delete payment:', id);

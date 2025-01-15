@@ -18,6 +18,19 @@ interface StoreFormData {
   title: string;
   description: string;
   address: string;
+  operatingHours: string;
+  location: {
+    lat: number;
+    lng: number;
+  };
+}
+
+interface Store {
+  id: string;
+  name: string;
+  avatar: string;
+  operatingHours: string;
+  description: string;
   location: {
     lat: number;
     lng: number;
@@ -27,18 +40,18 @@ interface StoreFormData {
 export default function CreateStore() {
   const router = useRouter();
   const [image, setImage] = useState<File | null>(null);
+  const [autocomplete, setAutocomplete] = useState<google.maps.places.Autocomplete | null>(null);
+  const [previewUrl, setPreviewUrl] = useState<string>('');
   const [formData, setFormData] = useState<StoreFormData>({
     title: '',
     description: '',
     address: '',
+    operatingHours: '7:00 AM - 10:00 PM', // Default hours
     location: {
       lat: 10.762622,
       lng: 106.660172
     }
   });
-  const [autocomplete, setAutocomplete] = useState<google.maps.places.Autocomplete | null>(null);
-  const [previewUrl, setPreviewUrl] = useState<string>('');
-
   const handleImageUpload = (event: ChangeEvent<HTMLInputElement>) => {
     if (event.target.files?.[0]) {
       const file = event.target.files[0];
@@ -64,8 +77,30 @@ export default function CreateStore() {
   };
 
   const handleSubmit = async () => {
-    // Handle store creation
-    router.push('/store');
+    try {
+      // Create new store object
+      const newStore: Store = {
+        id: (Math.random() * 1000).toString(), // Generate random ID for mock
+        name: formData.title,
+        avatar: previewUrl || 'https://play-lh.googleusercontent.com/9YKe7pdnCi4yTe2EPtKxF4VlqDL_qDyaWTrQxNWBxEyZGBs-e4GgVhGHNxTTmNF9UQ',
+        operatingHours: formData.operatingHours,
+        description: formData.description,
+        location: formData.location
+      };
+
+      // Get existing stores from localStorage or initialize empty array
+      const existingStores = JSON.parse(localStorage.getItem('stores') || '[]');
+      
+      // Add new store
+      const updatedStores = [...existingStores, newStore];
+      
+      // Save to localStorage
+      localStorage.setItem('stores', JSON.stringify(updatedStores));
+
+      router.push('/store');
+    } catch (error) {
+      console.error('Error creating store:', error);
+    }
   };
 
   return (

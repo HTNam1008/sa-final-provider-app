@@ -1,6 +1,6 @@
 'use client'
-import React, { useState } from 'react';
-import {Typography, Box, Stack, TextField, Button } from '@mui/material';
+import React, { useState, useEffect } from 'react';
+import {Alert, Typography, Box, Stack, TextField, Button, CircularProgress } from '@mui/material';
 import QuizzGrid from './components/QuizzGrid';
 import CreateQuizzButton from './components/CreateQuizzButton';
 import AddIcon from '@mui/icons-material/Add';
@@ -18,32 +18,56 @@ interface Quiz {
 const QuizPage = () => {
   const router = useRouter();
   const [searchTerm, setSearchTerm] = useState('');
+  const [quizzes, setQuizzes] = useState<Quiz[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   // Sample data - replace with actual API call
-  const quizzes: Quiz[] = [
-    {
-      id: '1',
-      title: 'Sample Quiz 1',
-      description: 'This is a description for Sample Quiz 1',
-      createdDate: '2025-01-01',
-      imageUrl: '/images/quizzes/quiz.jpg',
-    },
-    {
-      id: '2',
-      title: 'Sample Quiz 2',
-      description: 'This is a description for Sample Quiz 2',
-      createdDate: '2025-01-02',
-      imageUrl: '/images/quizzes/quiz.jpg',
-    },
-    {
-      id: '3',
-      title: 'Sample Quiz 3',
-      description: 'This is a description for Sample Quiz 3',
-      createdDate: '2025-01-02',
-      imageUrl: '/images/quizzes/quiz.jpg',
-    },
-    // Add more sample data as needed
-  ];
+  // const quizzes: Quiz[] = [
+  //   {
+  //     id: '1',
+  //     title: 'Sample Quiz 1',
+  //     description: 'This is a description for Sample Quiz 1',
+  //     createdDate: '2025-01-01',
+  //     imageUrl: '/images/quizzes/quiz.jpg',
+  //   },
+  //   {
+  //     id: '2',
+  //     title: 'Sample Quiz 2',
+  //     description: 'This is a description for Sample Quiz 2',
+  //     createdDate: '2025-01-02',
+  //     imageUrl: '/images/quizzes/quiz.jpg',
+  //   },
+  //   {
+  //     id: '3',
+  //     title: 'Sample Quiz 3',
+  //     description: 'This is a description for Sample Quiz 3',
+  //     createdDate: '2025-01-02',
+  //     imageUrl: '/images/quizzes/quiz.jpg',
+  //   },
+  //   // Add more sample data as needed
+  // ];
+
+  useEffect(() => {
+    const fetchQuizzes = async () => {
+      setLoading(true);
+      setError(null);
+      try {
+        const response = await fetch('/api/quizzes');
+        if (!response.ok) {
+          throw new Error('Failed to fetch quizzes');
+        }
+        const data = await response.json();
+        setQuizzes(data);
+      } catch (err) {
+        setError('Failed to load quizzes');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchQuizzes();
+  }, []);
 
   const filteredQuizzes = quizzes.filter((quiz) =>
     quiz.title.toLowerCase().includes(searchTerm.toLowerCase())
@@ -86,7 +110,11 @@ const QuizPage = () => {
             Create Quizz
           </Button>
         </Stack>
-        <QuizzGrid quizzes={filteredQuizzes} />
+        {loading && <CircularProgress />}
+
+        {error && <Alert severity="error">{error}</Alert>}
+
+        {!loading && !error && <QuizzGrid quizzes={filteredQuizzes} />}
       </Box>
     </PageContainer>
   );

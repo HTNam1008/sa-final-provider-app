@@ -20,7 +20,7 @@ const Dashboard = () => {
           <Typography variant="h2" component="h1">
             Dashboard
           </Typography>
-        </Stack>
+      </Stack>
       <Box>
         <Grid container spacing={3}>
           {/* General Statistics */}
@@ -29,9 +29,9 @@ const Dashboard = () => {
           </Grid>
 
           {/* Game and Discount Statistics */}
-          <Grid item xs={12} lg={6}>
+          {/* <Grid item xs={12} lg={6}>
             <GameStatistics />
-          </Grid>
+          </Grid> */}
           <Grid item xs={12} lg={6}>
             <DiscountVoucher />
           </Grid>

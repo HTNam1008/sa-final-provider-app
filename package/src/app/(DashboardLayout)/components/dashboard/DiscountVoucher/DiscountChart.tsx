@@ -26,18 +26,21 @@ ChartJS.register(
 );
 
 interface DiscountChartProps {
-  data: number[];
+  data: {
+    labels: string[];
+    values: number[];
+  };
 }
 
 const DiscountChart: React.FC<DiscountChartProps> = ({ data }) => {
   const theme = useTheme();
 
   const chartData: ChartData<'bar'> = {
-    labels: ['10%', '20%', '30%', '40%', '50%'],
+    labels: data.labels,
     datasets: [
       {
         label: 'Number of Vouchers',
-        data: data,
+        data: data.values,
         backgroundColor: [
           theme.palette.primary.main,
           theme.palette.secondary.main,
@@ -57,21 +60,72 @@ const DiscountChart: React.FC<DiscountChartProps> = ({ data }) => {
         beginAtZero: true,
       },
     },
+    plugins: {
+      title: {
+        display: true,
+        text: 'Voucher Distribution by Discount'
+      },
+      legend: {
+        display: true
+      }
+    }
   };
 
   return (
-    <Box
-      sx={{
-        boxShadow: theme.shadows[3],
-        borderRadius: 2,
-        overflow: 'hidden',
-      }}
-    >
-      <DashboardCard title="Discount Voucher Statistics">
+    <Box sx={{ boxShadow: theme.shadows[3], borderRadius: 2, overflow: 'hidden' }}>
+      <DashboardCard title="Discount Distribution">
         <Bar data={chartData} options={options} />
       </DashboardCard>
     </Box>
   );
 };
+// interface DiscountChartProps {
+//   data: number[];
+// }
+
+// const DiscountChart: React.FC<DiscountChartProps> = ({ data }) => {
+//   const theme = useTheme();
+
+//   const chartData: ChartData<'bar'> = {
+//     labels: ['10%', '20%', '30%', '40%', '50%'],
+//     datasets: [
+//       {
+//         label: 'Number of Vouchers',
+//         data: data,
+//         backgroundColor: [
+//           theme.palette.primary.main,
+//           theme.palette.secondary.main,
+//           theme.palette.success.main,
+//           theme.palette.warning.main,
+//           theme.palette.error.main,
+//         ],
+//         borderWidth: 1,
+//       },
+//     ],
+//   };
+
+//   const options: ChartOptions<'bar'> = {
+//     responsive: true,
+//     scales: {
+//       y: {
+//         beginAtZero: true,
+//       },
+//     },
+//   };
+
+//   return (
+//     <Box
+//       sx={{
+//         boxShadow: theme.shadows[3],
+//         borderRadius: 2,
+//         overflow: 'hidden',
+//       }}
+//     >
+//       <DashboardCard title="Discount Voucher Statistics">
+//         <Bar data={chartData} options={options} />
+//       </DashboardCard>
+//     </Box>
+//   );
+// };
 
 export default DiscountChart;

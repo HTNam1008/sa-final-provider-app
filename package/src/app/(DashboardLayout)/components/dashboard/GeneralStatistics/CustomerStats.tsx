@@ -1,6 +1,7 @@
-import React from 'react';
-import { Grid, Box, Typography, Select, MenuItem, SelectChangeEvent, useTheme } from '@mui/material';
+import React, {useState, useEffect} from 'react';
+import { CircularProgress, Grid, Box, Typography, Select, MenuItem, SelectChangeEvent, useTheme } from '@mui/material';
 import DashboardCard from '@/app/(DashboardLayout)/components/shared/DashboardCard';
+import axios from 'axios';
 
 const CustomerStats = () => {
   // Define TimeFrame type
@@ -8,18 +9,51 @@ const CustomerStats = () => {
 
   const [timeFrame, setTimeFrame] = React.useState<TimeFrame>('today');
   const theme = useTheme();
+  const [customerTotal, setCustomerTotal] = useState<number | null>(null);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [error, setError] = useState<string | null>(null);
 
-  // Mock data for customers
-  const customerData: Record<TimeFrame, number> = {
-    today: 150,
-    week: 850,
-    month: 3200,
-    year: 25000,
-  };
+  // // Mock data for customers
+  // const customerData: Record<TimeFrame, number> = {
+  //   today: 150,
+  //   week: 850,
+  //   month: 3200,
+  //   year: 25000,
+  // };
 
   const handleChange = (event: SelectChangeEvent<TimeFrame>) => {
     setTimeFrame(event.target.value as TimeFrame);
   };
+
+  useEffect(() => {
+    const fetchCustomerData = async () => {
+      setLoading(true);
+      setError(null);
+      try {
+        const token = localStorage.getItem('token');
+        console.log("Token:", token);
+        if (token == null) {
+          setCustomerTotal(0);
+          return;
+        }
+
+        const response = await axios.get(`api/events/all`,{
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        });
+
+        const result = response.data.length ?? 0;
+        setCustomerTotal(result*2);
+      } catch (err: any) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchCustomerData();
+  }, [timeFrame]);
 
   return (
     <Box
@@ -45,9 +79,15 @@ const CustomerStats = () => {
             </Select>
           </Grid>
           <Grid item xs={12}>
-            <Typography variant="h4" fontWeight="700" color={theme.palette.primary.main}>
-              Total: {customerData[timeFrame]}
-            </Typography>
+            {loading ? (
+              <CircularProgress />
+            ) : error ? (
+              <Typography color="error">{error}</Typography>
+            ) : (
+              <Typography variant="h4" fontWeight="700" color={theme.palette.primary.main}>
+                Total: {customerTotal !== null ? customerTotal : 'N/A'}
+              </Typography>
+            )}
           </Grid>
         </Grid>
       </DashboardCard>
