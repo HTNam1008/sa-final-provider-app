@@ -1,9 +1,14 @@
 import {
   IconAperture,
+  IconBrandAppstore,
+  IconBrandCampaignmonitor,
+  IconBrandEvernote,
   IconCopy,
+  IconGoGame,
   IconLayoutDashboard,
   IconLogin,
   IconMoodHappy,
+  IconReportMoney,
   IconTypography,
   IconUserPlus,
 } from "@tabler/icons-react";
@@ -25,25 +30,25 @@ const Menuitems = [
   {
     id: uniqueId(),
     title: "Campaign",
-    icon: IconLayoutDashboard,
+    icon: IconBrandCampaignmonitor,
     href: "/campaign",
   },
   {
     id: uniqueId(),
     title: "Store",
-    icon: IconLayoutDashboard,
+    icon: IconBrandAppstore,
     href: "/store",
   },
   {
     id: uniqueId(),
     title: "Payment",
-    icon: IconLayoutDashboard,
+    icon: IconReportMoney,
     href: "/payment",
   },
   {
     id: uniqueId(),
     title: "Quizzes",
-    icon: IconLayoutDashboard,
+    icon: IconGoGame,
     href: "/quizzes",
   },
   // {
@@ -62,22 +67,22 @@ const Menuitems = [
   //   icon: IconCopy,
   //   href: "/utilities/shadow",
   // },
-  {
-    navlabel: true,
-    subheader: "Auth",
-  },
-  {
-    id: uniqueId(),
-    title: "Login",
-    icon: IconLogin,
-    href: "/authentication/login",
-  },
-  {
-    id: uniqueId(),
-    title: "Register",
-    icon: IconUserPlus,
-    href: "/authentication/register",
-  },
+  // {
+  //   navlabel: true,
+  //   subheader: "Auth",
+  // },
+  // {
+  //   id: uniqueId(),
+  //   title: "Login",
+  //   icon: IconLogin,
+  //   href: "/authentication/login",
+  // },
+  // {
+  //   id: uniqueId(),
+  //   title: "Register",
+  //   icon: IconUserPlus,
+  //   href: "/authentication/register",
+  // },
   // {
   //   navlabel: true,
   //   subheader: "Extra",
