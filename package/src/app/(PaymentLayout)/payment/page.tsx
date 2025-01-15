@@ -50,20 +50,20 @@ const PaymentPage = () => {
     }
   ];
 
-  const fetchPayments = async () => {
-    try {
-      const response = await fetch('/api/payments');
-      const data = await response.json();
-      setRows(data);
-    } catch (error) {
-      console.error('Error fetching payments:', error);
-    }
-  };
+  // const fetchPayments = async () => {
+  //   try {
+  //     const response = await fetch('/api/payments');
+  //     const data = await response.json();
+  //     setRows(data);
+  //   } catch (error) {
+  //     console.error('Error fetching payments:', error);
+  //   }
+  // };
 
   
-  useEffect(() => {
-    fetchPayments();
-  }, []);
+  // useEffect(() => {
+  //   fetchPayments();
+  // }, []);
 
   const handleDelete = (id: string) => {
     console.log('Delete payment:', id);
