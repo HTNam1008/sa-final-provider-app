@@ -71,7 +71,7 @@ const AuthUpdateProfile = ({ title, subtitle, subtext }: UpdateProfileType) => {
       return;
     }
     try {
-      const response = await axios.put(`/api/users/${id}/profile/brand`, formData, {
+      const response = await axios.put(`/api/users/${id}/profile`, formData, {
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`
