@@ -23,7 +23,7 @@ interface ProfileData {
 }
 
 const Header = ({toggleMobileSidebar}: ItemType) => {
-  const [profileName, setProfileName] = useState<string>("New User");
+  const [profileName, setProfileName] = useState<string | null>(null);
   const [profile, setProfile] = useState<ProfileData | null>(null);
   const [loading, setLoading] = useState(true);
 

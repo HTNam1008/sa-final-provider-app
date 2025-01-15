@@ -1,91 +1,80 @@
 import React from 'react';
-import { Line } from 'react-chartjs-2';
+import { Bar } from 'react-chartjs-2';
 import { useTheme } from '@mui/material/styles';
-import { Box, Typography } from '@mui/material';
-import DashboardCard from '@/app/(DashboardLayout)/components/shared/DashboardCard';
+import { Box } from '@mui/material';
+import DashboardCard from '../../shared/DashboardCard';
 import {
   Chart as ChartJS,
   CategoryScale,
   LinearScale,
-  PointElement,
-  LineElement,
+  BarElement,
   Title,
   Tooltip,
   Legend,
-  Filler,
   ChartData,
   ChartOptions
 } from 'chart.js';
 
-// Register ChartJS components
 ChartJS.register(
   CategoryScale,
   LinearScale,
-  PointElement,
-  LineElement,
+  BarElement,
   Title,
   Tooltip,
-  Legend,
-  Filler
+  Legend
 );
 
-interface VoucherData {
-  released: number[];
-  unused: number[];
-}
-
 interface VoucherChartProps {
-  data: VoucherData;
-  labels: string[];
+  data: {
+    labels: string[];
+    released: number[];
+    unused: number[];
+  };
 }
 
-const VoucherChart: React.FC<VoucherChartProps> = ({ data, labels }) => {
+const VoucherChart: React.FC<VoucherChartProps> = ({ data }) => {
   const theme = useTheme();
 
-  const chartData: ChartData<'line'> = {
-    labels: labels,
+  const chartData: ChartData<'bar'> = {
+    labels: data.labels,
     datasets: [
       {
         label: 'Released Vouchers',
         data: data.released,
-        borderColor: theme.palette.primary.main,
-        backgroundColor: 'rgba(0, 123, 255, 0.2)',
-        fill: true,
+        backgroundColor: theme.palette.primary.main,
+        borderWidth: 1,
       },
       {
         label: 'Unused Vouchers',
         data: data.unused,
-        borderColor: theme.palette.secondary.main,
-        backgroundColor: 'rgba(255, 99, 132, 0.2)',
-        fill: true,
-      },
+        backgroundColor: theme.palette.secondary.main,
+        borderWidth: 1,
+      }
     ],
   };
 
-  const options: ChartOptions<'line'> = {
+  const options: ChartOptions<'bar'> = {
     responsive: true,
     scales: {
       y: {
         beginAtZero: true,
       },
     },
+    plugins: {
+      title: {
+        display: true,
+        text: 'Voucher Distribution by Type'
+      },
+      legend: {
+        display: true
+      }
+    }
   };
 
   return (
-    <Box
-      sx={{
-        boxShadow: theme.shadows[3],
-        borderRadius: 2,
-        overflow: 'hidden',
-      }}
-    >
+    <Box sx={{ boxShadow: theme.shadows[3], borderRadius: 2, overflow: 'hidden' }}>
       <DashboardCard title="Voucher Statistics">
-        <Box>
-          <Typography variant="h6" gutterBottom>
-            Statistics Overview
-          </Typography>
-          <Line data={chartData} options={options} />
-        </Box>
+        <Bar data={chartData} options={options} />
       </DashboardCard>
     </Box>
   );

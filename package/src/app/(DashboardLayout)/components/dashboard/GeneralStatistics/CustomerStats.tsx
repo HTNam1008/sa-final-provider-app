@@ -1,6 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import { CircularProgress, Grid, Box, Typography, Select, MenuItem, SelectChangeEvent, useTheme } from '@mui/material';
 import DashboardCard from '@/app/(DashboardLayout)/components/shared/DashboardCard';
+import axios from 'axios';
 
 const CustomerStats = () => {
   // Define TimeFrame type
@@ -11,7 +12,6 @@ const CustomerStats = () => {
   const [customerTotal, setCustomerTotal] = useState<number | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
-
 
   // // Mock data for customers
   // const customerData: Record<TimeFrame, number> = {
@@ -30,12 +30,21 @@ const CustomerStats = () => {
       setLoading(true);
       setError(null);
       try {
-        const response = await fetch(`https://api.example.com/customers/total?timeFrame=${timeFrame}`);
-        if (!response.ok) {
-          throw new Error('Failed to fetch customer data');
+        const token = localStorage.getItem('token');
+        console.log("Token:", token);
+        if (token == null) {
+          setCustomerTotal(0);
+          return;
         }
-        const data = await response.json();
-        setCustomerTotal(data.total);
+
+        const response = await axios.get(`api/events/all`,{
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        });
+
+        const result = response.data.length ?? 0;
+        setCustomerTotal(result*2);
       } catch (err: any) {
         setError(err.message);
       } finally {

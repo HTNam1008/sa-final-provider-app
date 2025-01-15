@@ -29,9 +29,9 @@ const Dashboard = () => {
           </Grid>
 
           {/* Game and Discount Statistics */}
-          <Grid item xs={12} lg={6}>
+          {/* <Grid item xs={12} lg={6}>
             <GameStatistics />
-          </Grid>
+          </Grid> */}
           <Grid item xs={12} lg={6}>
             <DiscountVoucher />
           </Grid>

@@ -24,6 +24,7 @@ interface ProfileData {
   address: string;
   gpsLat: string;
   gpsLong: string;
+  role: string;
 }
 
 const AuthUpdateProfile = ({ title, subtitle, subtext }: UpdateProfileType) => {
@@ -35,6 +36,7 @@ const AuthUpdateProfile = ({ title, subtitle, subtext }: UpdateProfileType) => {
     address: "",
     gpsLat: "",
     gpsLong: "",
+    role: "brand" 
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -57,9 +59,24 @@ const AuthUpdateProfile = ({ title, subtitle, subtext }: UpdateProfileType) => {
     setLoading(true);
     setError("");
 
+    const id = localStorage.getItem('id');
+    if (id == null) {
+      router.push("/");
+      return;
+    }
+
+    const token = localStorage.getItem('token');
+    if (token == null) {
+      router.push("/");
+      return;
+    }
     try {
-      const response = await axios.put("/api/profile/update", formData);
-      router.push("/profile");
+      const response = await axios.put(`/api/users/${id}/profile/brand`, formData, {
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+      }});
+      router.push("/");
     } catch (err) {
       setError("Failed to update profile");
     } finally {

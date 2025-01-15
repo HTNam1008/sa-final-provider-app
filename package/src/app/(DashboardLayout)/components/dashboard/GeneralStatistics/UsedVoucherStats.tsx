@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { CircularProgress, Grid, Box, Typography, Select, MenuItem, SelectChangeEvent, useTheme } from '@mui/material';
 import DashboardCard from '@/app/(DashboardLayout)/components/shared/DashboardCard';
+import axios from 'axios';
 
 const UsedVoucherStats = () => {
     type TimeFrame = 'today' | 'week' | 'month' | 'year';
@@ -22,25 +23,39 @@ const UsedVoucherStats = () => {
     };
 
     useEffect(() => {
-        const fetchUsedVoucherData = async () => {
-            setLoading(true);
-            setError(null);
-            try {
-                const response = await fetch(`https://api.example.com/vouchers/used?timeFrame=${timeFrame}`);
-                if (!response.ok) {
-                    throw new Error('Failed to fetch used voucher data');
-                }
-                const data = await response.json();
-                setUsedVoucherCount(data.total); // Assuming the API returns an object with a 'total' field
-            } catch (err: any) {
-                setError(err.message);
-            } finally {
-                setLoading(false);
+        const fetchData = async () => {
+          setLoading(true);
+          setError(null);
+          try {
+            const token = localStorage.getItem('token');
+            console.log("Token:", token);
+            if (token == null) {
+            setUsedVoucherCount(0);
+              return;
             }
+            const response = await axios.get(`/api/events/all`, {
+              headers: {
+                'Authorization': `Bearer ${token}`
+              }
+            });
+            console.log("Registration successful:", response.data);
+            const totalUsed = response.data.reduce((sum: number, campaign: any) => 
+                sum + campaign.vouchers.reduce((vSum: number, voucher: any) => 
+                  vSum + ((voucher.initQuantity || 0) - (voucher.currentQuantity || 0)), 0
+                ), 0
+              );
+        
+              setUsedVoucherCount(totalUsed);
+          } catch (err: any) {
+            setError(err.message);
+          } finally {
+            setLoading(false);
+          }
         };
+    
+        fetchData();
+      }, [timeFrame]);
 
-        fetchUsedVoucherData();
-    }, [timeFrame]);
 
     return (
         <Box
